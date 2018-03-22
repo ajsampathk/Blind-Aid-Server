@@ -9,6 +9,7 @@ module.exports = {
     {
       name      : 'Blind-Aid-Server',
       script    : './index.js',
+    }  
   ],
 
   /**
