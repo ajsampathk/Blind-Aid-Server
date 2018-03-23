@@ -1,8 +1,11 @@
 const express = require('express')
+const bodyParser = require('body-parser')
+
 const app = express()
-// app.get('/', (req, res) => {
-//   res.send('HEY!')
-// })
-app.use(express.static('public'))
+
+app.use(bodyParser.json())
+app.post('/', function (request, response) {
+  response.send(request.body)
+})
 
 app.listen(3020, () => console.log('Server running on port 3020'))
