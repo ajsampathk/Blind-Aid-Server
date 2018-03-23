@@ -5,9 +5,9 @@ const app = express()
 
 app.use(bodyParser.json())
 app.post('/', function (request, response) {
-  var result = {result: 'Success recieved '}
-  var responsejson = response.body
-  result = result.concat(responsejson)
+  var result = {result: 'Success,recieved '}
+  // var responsejson = response.body
+  // result = result.concat(responsejson)
   // response.send(request.body)
   response.send(JSON.stringify(result))
 })
