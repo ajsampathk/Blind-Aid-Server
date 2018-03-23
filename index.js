@@ -6,11 +6,12 @@ const app = express()
 app.use(express.static('public'))
 // app.use(bodyParser.json())
 app.post('/comm', function (request, response) {
-  var result = {result: 'Success,recieved ', data: request.body}
+  var result = {result: 'Success,recieved '}
+  var data = JSON.parse(request.query)
   // var responsejson = response.body
   // result = result.concat(responsejson)
   // response.send(request.body)
-  response.send(JSON.stringify(result))
+  response.send(JSON.stringify(result.concat(data))
 })
 
 app.listen(3020, () => console.log('Server running on port 3020'))
