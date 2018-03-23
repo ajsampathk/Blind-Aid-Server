@@ -11,7 +11,7 @@ app.post('/comm', function (request, response) {
   // var responsejson = response.body
   // result = result.concat(responsejson)
   // response.send(request.body)
-  response.send(JSON.stringify(result.concat(data))
+  response.send(JSON.stringify(result.concat(data)))
 })
 
 app.listen(3020, () => console.log('Server running on port 3020'))
