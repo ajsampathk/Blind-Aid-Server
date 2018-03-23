@@ -5,7 +5,9 @@ const app = express()
 
 app.use(bodyParser.json())
 app.post('/', function (request, response) {
+  var result = {result: 'success'}
   response.send(request.body)
+  response.send(JSON.stringify(result))
 })
 
 app.listen(3020, () => console.log('Server running on port 3020'))
