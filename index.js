@@ -20,12 +20,38 @@ app.post('/signup', function (request, response) {
     } else {
       // console.log('connected to database')
       global.database = db
-      insertUser()
-      response.send(JSON.stringify({result: 'Success'}))
-      db.close()
+      UpdateUser(response)
+      // console.log(state)
     }
   })
 })
+
+app.post('/login', function (req, res) {
+  global.response = res
+  dbClient.connect(url, function (err, db) {
+    if (err) {
+      res.send(JSON.stringify({result: 'Failed', error: 'InternalError'}))
+      throw err
+    } else {
+      // console.log('connected to database')
+      global.database = db
+      auth(req)
+    }
+  })
+})
+
+function UpdateUser (response) {
+  var req = global.req
+  var db = global.database.db('Users')
+  db.collection('Users').findOne({username: req.body.username}, function (err, res) {
+    if (err) throw err
+    // console.log(res)
+    if (res === null) {
+      insertUser()
+      response.send(JSON.stringify({result: 'Success', error: null}))
+    } else response.send(JSON.stringify({result: 'Failed', error: 'ExistentUser'}))
+  })
+}
 
 function insertUser () {
   var req = global.req
@@ -34,5 +60,26 @@ function insertUser () {
   db.collection('Users').insertOne(userobject, function (err, res) {
     if (err) throw err
     // console.log('Insert completed')
+  })
+  global.database.close()
+}
+
+function auth (req) {
+  var db = global.database.db('Users')
+  var query = {username: req.body.username}
+  // console.log(query)
+  db.collection('Users').findOne(query, function (err, res) {
+    if (err) throw err
+    // console.log(res.key, req.body)
+    // checkPasskey(res, req.body)
+    if (res !== null) {
+      if (res.key === req.body.password) {
+        global.response.send(JSON.stringify({result: 'Success', error: null}))
+      } else {
+        global.response.send(JSON.stringify({result: 'Failed', error: 'InvalidKey'}))
+      }
+    } else global.response.send(JSON.stringify({result: 'Failed', error: 'dataMismatch'}))
+
+    global.database.close()
   })
 }
