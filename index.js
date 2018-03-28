@@ -16,7 +16,7 @@ app.post('/signup', function (request, response) {
   global.req = request
   dbClient.connect(url, function (err, db) {
     if (err) {
-      response.send(JSON.stringify({result: 'Failed'}))
+      response.send(JSON.stringify({result: 'Failed', error: 'InternalError'}))
       throw err
     } else {
       // console.log('connected to database')
@@ -45,16 +45,19 @@ function UpdateUser (response) {
   var req = global.req
   var db = global.database.db('Users')
   db.collection('Users').findOne({username: req.body.username}, function (err, res) {
-    if (err) throw err
+    if (err) {
+      response.send(JSON.stringify({result: 'Failed', error: 'InternalError'}))
+      throw err
+    }
     // console.log(res)
     if (res === null) {
-      insertUser()
+      insertUser(response)
       response.send(JSON.stringify({result: 'Success', error: null}))
     } else response.send(JSON.stringify({result: 'Failed', error: 'ExistentUser'}))
   })
 }
 
-function insertUser () {
+function insertUser (response) {
   var req = global.req
   var db = global.database.db('Users')
 
@@ -62,7 +65,10 @@ function insertUser () {
   // console.log(authKey)
   var userobject = {username: req.body.username, password: req.body.password, key: authKey}
   db.collection('Users').insertOne(userobject, function (err, res) {
-    if (err) throw err
+    if (err) {
+      response.send(JSON.stringify({result: 'Failed', error: 'InternalError'}))
+      throw err
+    }
     // console.log('Insert completed')
   })
   global.database.close()
@@ -73,7 +79,10 @@ function auth (req) {
   var query = {username: req.body.username}
   // console.log(query)
   db.collection('Users').findOne(query, function (err, res) {
-    if (err) throw err
+    if (err) {
+      global.response.send(JSON.stringify({result: 'Failed', error: 'InternalError'}))
+      throw err
+    }
 
     if (res !== null) {
       if (res.password === req.body.password) {
