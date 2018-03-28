@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const dbClient = require('mongodb').MongoClient
+const crypto = require('crypto')
 
 const app = express()
 
@@ -56,7 +57,10 @@ function UpdateUser (response) {
 function insertUser () {
   var req = global.req
   var db = global.database.db('Users')
-  var userobject = {username: req.body.username, key: req.body.password}
+
+  var authKey = crypto.createHash('md5').update(req.body.username).digest('hex')
+  // console.log(authKey)
+  var userobject = {username: req.body.username, password: req.body.password, key: authKey}
   db.collection('Users').insertOne(userobject, function (err, res) {
     if (err) throw err
     // console.log('Insert completed')
@@ -70,11 +74,10 @@ function auth (req) {
   // console.log(query)
   db.collection('Users').findOne(query, function (err, res) {
     if (err) throw err
-    // console.log(res.key, req.body)
-    // checkPasskey(res, req.body)
+
     if (res !== null) {
-      if (res.key === req.body.password) {
-        global.response.send(JSON.stringify({result: 'Success', error: null}))
+      if (res.password === req.body.password) {
+        global.response.send(JSON.stringify({result: 'Success', key: res.key}))
       } else {
         global.response.send(JSON.stringify({result: 'Failed', error: 'InvalidKey'}))
       }
