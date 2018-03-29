@@ -61,15 +61,21 @@ function insertUser (response) {
   var req = global.req
   var db = global.database.db('Users')
 
-  var authKey = crypto.createHash('md5').update(req.body.username).digest('hex')
+  var authKey = crypto.createHash('md5').update(req.body.password).digest('hex')
   // console.log(authKey)
-  var userobject = {username: req.body.username, password: req.body.password, key: authKey}
+  var userobject =
+    {
+      username: req.body.username,
+      password: authKey,
+      email: req.body.email,
+      phone: req.body.phone
+    }
+
   db.collection('Users').insertOne(userobject, function (err, res) {
     if (err) {
       response.send(JSON.stringify({result: 'Failed', error: 'InternalError'}))
       throw err
     }
-    // console.log('Insert completed')
   })
   global.database.close()
 }
@@ -86,7 +92,7 @@ function auth (req) {
 
     if (res !== null) {
       if (res.password === req.body.password) {
-        global.response.send(JSON.stringify({result: 'Success', key: res.key}))
+        global.response.send(JSON.stringify({result: 'Success'}))
       } else {
         global.response.send(JSON.stringify({result: 'Failed', error: 'InvalidKey'}))
       }
