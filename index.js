@@ -6,11 +6,15 @@ const crypto = require('crypto')
 const app = express()
 
 var url = 'mongodb://localhost:27017/'
+var locations = require('./routes/location.js')
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static('public'))
 app.use(bodyParser.json())
 
 app.listen(3020, () => console.log('Server running on port 3020'))
+
+app.use('/location', locations)
 
 app.post('/signup', function (request, response) {
   global.req = request
@@ -47,7 +51,7 @@ app.post('/login', function (req, res) {
 
 function UpdateUser (response) {
   var req = global.req
-  var db = global.database.db('Users')
+  var db = global.database.db('BAS')
   db.collection('Users').findOne({username: req.body.username}, function (err, res) {
     if (err) {
       response.send(JSON.stringify({result: 'Failed', error: 'InternalError'}))
@@ -63,7 +67,7 @@ function UpdateUser (response) {
 
 function insertUser (response) {
   var req = global.req
-  var db = global.database.db('Users')
+  var db = global.database.db('BAS')
 
   var authKey = crypto.createHash('md5').update(req.body.password).digest('hex')
   // console.log(authKey)
@@ -85,7 +89,7 @@ function insertUser (response) {
 }
 
 function auth (req) {
-  var db = global.database.db('Users')
+  var db = global.database.db('BAS')
   var query = {username: req.body.username}
   // console.log(query)
   db.collection('Users').findOne(query, function (err, res) {
