@@ -27,6 +27,10 @@ app.post('/signup', function (request, response) {
   })
 })
 
+app.post('/testjson', (req, res) => {
+  res.send('Recieved JSON')
+})
+
 app.post('/login', function (req, res) {
   global.response = res
   dbClient.connect(url, function (err, db) {
