@@ -10,13 +10,12 @@ router.post('/update', (req, res) => {
       res.send('Failed to log')
     } else {
       global.db = db
-      updateLocation(req)
-      res.send('Location Logged')
+      updateLocation(req, res)
     }
   })
 })
 
-function updateLocation (req) {
+function updateLocation (req, res) {
   var db = global.db.db('BAS')
   var LObject =
   {
@@ -27,7 +26,7 @@ function updateLocation (req) {
   db.collection('Locations').insertOne(LObject, (err, res) => {
     if (err) {
       console.log(err)
-    }
+    } else res.send('Location Logged')
     global.db.close()
   })
 }
