@@ -22,7 +22,7 @@ function updateLocation (req) {
   {
     lat: req.body.location.lat,
     lng: req.body.location.lng,
-    acc: req.body.acc,
+    acc: req.body.accuracy,
     devID: req.body.id
   }
   db.collection('Locations').insertOne(LObject, (err, res) => {
