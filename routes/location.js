@@ -5,28 +5,30 @@ const router = express.Router()
 var url = 'mongodb://localhost:27017/'
 
 router.post('/update', (req, res) => {
+  global.res = res
   dbClient.connect(url, (err, db) => {
     if (err) {
       res.send('Failed to log')
     } else {
       global.db = db
-      updateLocation(req, res)
+      updateLocation(req)
     }
   })
 })
 
-function updateLocation (req, res) {
+function updateLocation (req) {
   var db = global.db.db('BAS')
   var LObject =
   {
-    lat: req.body.lat,
-    long: req.body.long,
+    lat: req.body.location.lat,
+    lng: req.body.location.lng,
+    acc: req.body.acc,
     devID: req.body.id
   }
   db.collection('Locations').insertOne(LObject, (err, res) => {
     if (err) {
-      console.log(err)
-    } else res.send('Location Logged')
+      global.res.send('Failed to log')
+    } else global.res.send('Location Logged')
     global.db.close()
   })
 }
