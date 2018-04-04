@@ -27,7 +27,7 @@ router.post('/getloc', (req, res) => {
         if (err) {
           throw err
         } else {
-          console.log(res)
+          global.response.send(JSON.stringify({lat: res[0].lat, lng: res[0].lng, acc: res[0].acc}))
         }
       })
     }
