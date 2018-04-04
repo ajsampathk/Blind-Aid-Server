@@ -22,11 +22,12 @@ router.post('/getloc', (req, res) => {
     if (err) {
       res.send('Database Error')
     } else {
-      db.db('BAS').collection('Locations').findOne({devID: req.body.id}, (err, res) => {
+      var cursor = db.db('BAS').collection('Locations').find({devID: req.body.id}).limit(1).sort({$natural: -1})
+      cursor.toArray((err, res) => {
         if (err) {
-          global.response.send('Internal Error')
+          throw err
         } else {
-          global.response.send(JSON.stringify(res))
+          console.log(res)
         }
       })
     }
