@@ -16,6 +16,23 @@ router.post('/update', (req, res) => {
   })
 })
 
+router.post('/getloc', (req, res) => {
+  global.response = res
+  dbClient.connect(url, (err, db) => {
+    if (err) {
+      res.send('Database Error')
+    } else {
+      db.findOne({devID: req.body.id}, (err, res) => {
+        if (err) {
+          global.response.send('Internal Error')
+        } else {
+          global.response.send(JSON.stringify(res))
+        }
+      }).sort({$natural: -1})
+    }
+  })
+})
+
 function updateLocation (req) {
   var db = global.db.db('BAS')
   var LObject =
