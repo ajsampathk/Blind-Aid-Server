@@ -22,7 +22,7 @@ router.post('/getloc', (req, res) => {
     if (err) {
       res.send('Database Error')
     } else {
-      db.findOne({devID: req.body.id}, (err, res) => {
+      db.collection('Locations').findOne({devID: req.body.id}, (err, res) => {
         if (err) {
           global.response.send('Internal Error')
         } else {
