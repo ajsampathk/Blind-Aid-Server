@@ -28,7 +28,7 @@ router.post('/getloc', (req, res) => {
         } else {
           global.response.send(JSON.stringify(res))
         }
-      }).sort({$natural: -1})
+      })
     }
   })
 })
