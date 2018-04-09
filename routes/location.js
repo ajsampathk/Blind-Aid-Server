@@ -17,21 +17,31 @@ router.post('/update', (req, res) => {
 })
 
 router.post('/getloc', (req, res) => {
-  global.response = res
-  dbClient.connect(url, (err, db) => {
-    if (err) {
-      res.send('Database Error')
-    } else {
-      var cursor = db.db('BAS').collection('Locations').find({devID: req.body.id}).limit(1).sort({$natural: -1})
-      cursor.toArray((err, res) => {
-        if (err) {
-          throw err
-        } else {
-          global.response.send(JSON.stringify({lat: res[0].lat, lng: res[0].lng, acc: res[0].acc}))
-        }
-      })
-    }
-  })
+  if (req.body.id) {
+    global.response = res
+    dbClient.connect(url, (err, db) => {
+      if (err) {
+        res.send('Database Error')
+      } else {
+        var cursor = db.db('BAS').collection('Locations').find({devID: req.body.id}).limit(1).sort({$natural: -1})
+        cursor.toArray((err, res) => {
+          if (err) {
+            global.response.send('Device not found')
+            throw err
+          } else {
+            console.log(res)
+            if (res) {
+              global.response.send(JSON.stringify({lat: res[0].lat, lng: res[0].lng, acc: res[0].acc}))
+            } else {
+              global.response.send('Could not locate device')
+            }
+          }
+        })
+      }
+    })
+  } else {
+    res.send('Device ID required')
+  }
 })
 
 function updateLocation (req) {
@@ -41,7 +51,8 @@ function updateLocation (req) {
     lat: req.body.location.lat,
     lng: req.body.location.lng,
     acc: req.body.accuracy,
-    devID: req.body.id
+    devID: req.body.id,
+    sos: req.body.sos
   }
   db.collection('Locations').insertOne(LObject, (err, res) => {
     if (err) {
