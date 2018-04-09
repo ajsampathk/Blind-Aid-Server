@@ -29,7 +29,7 @@ router.post('/getloc', (req, res) => {
             global.response.send('Device not found')
             throw err
           } else {
-            console.log(res)
+            // console.log(res)
             if (res) {
               global.response.send(JSON.stringify({lat: res[0].lat, lng: res[0].lng, acc: res[0].acc}))
             } else {
