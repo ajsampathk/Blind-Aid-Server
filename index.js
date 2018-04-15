@@ -18,5 +18,5 @@ app.use('/user', users)
 app.use('/link', link)
 
 app.post('/testjson', (req, res) => {
-  res.send('Recieved JSON, Test Completed')
+  res.send(JSON.stringify({Success: true}))
 })
