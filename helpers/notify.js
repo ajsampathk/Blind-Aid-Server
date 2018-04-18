@@ -24,7 +24,7 @@ var notify = {
     })
 
     var mailOptions = {
-      from: 'abhijith3797@gmail.com',
+      from: creds.email,
       to: emails,
       subject: 'SOS Notification',
       html: htmlbody
