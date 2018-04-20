@@ -16,7 +16,7 @@ var notify = {
     var ISTTime = new Date(time.getTime() + (istoffest + offset) * 60000)
 
     console.log(emails)
-    var htmlbody = '<html><h3>SOS has been called!</h3><body><p>An SOS has been called by a device(' + String(devID) + ') linked to this email from the following location at ' + String(ISTTime.getHours()) + ':' + String(ISTTime.getMinutes()) + '</p><br><a href = "http://maps.google.com?q=' + String(lat) + ',' + String(lng) + '">Click Here to view the location</a><p>Please Click on the following link to view the location where the SOS was called from.</p><br><p>This is an automated email Please do not reply</p><br><br><p>Helping Hand</p><br><p>Developer: AJ</p></body></html>'
+    var htmlbody = '<html><h3>SOS has been called!</h3><body><p>An SOS has been called by a device(' + String(devID) + ') linked to this email from the following location at ' + String(ISTTime.getHours()) + ':' + String(ISTTime.getMinutes()) + '</p><br><p>Please</p><a href = "http://maps.google.com?q=' + String(lat) + ',' + String(lng) + '">Click Here to view the location</a><p>where the SOS was called from.</p><br><p>This is an automated email Please do not reply</p><br><br><p>Helping Hand</p><br><p>Developer: AJ</p></body></html>'
     this.send(emails, htmlbody)
   },
 
