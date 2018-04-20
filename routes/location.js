@@ -75,8 +75,7 @@ function _notify (devID, lat, lng) {
     if (err) {
       console.log('Databse Error')
     } else {
-      // TODO: Email
-      notify.notifylist(res.person, lat, lng)
+      notify.notifylist(res.person, lat, lng, devID)
     }
     global.db.close()
   })
