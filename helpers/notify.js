@@ -9,8 +9,14 @@ var notify = {
     for (i = 1; i < list.length; i++) {
       emails = emails + ',' + list[i].email
     }
+
+    var time = new Date()
+    var offset = time.getTimezoneOffset()
+    var istoffest = 330
+    var ISTTime = new Date(time.getTime() + (istoffest + offset) * 60000)
+
     console.log(emails)
-    var htmlbody = '<html><h1>SOS has been called!</h1><body><p>An SOS has been called by a device(' + String(devID) + ') linked to this email at the following location</p><body><a href = "http://maps.google.com?q=' + String(lat) + ',' + String(lng) + '">Click Here to view the location</a></body></html>'
+    var htmlbody = '<html><h1>SOS has been called!</h1><body><p>An SOS has been called by a device(' + String(devID) + ') linked to this email from the following location at ' + String(ISTTime.getHours()) + ':' + String(ISTTime.getMinutes()) + '</p><body><a href = "http://maps.google.com?q=' + String(lat) + ',' + String(lng) + '">Click Here to view the location</a></body></html>'
     this.send(emails, htmlbody)
   },
 
