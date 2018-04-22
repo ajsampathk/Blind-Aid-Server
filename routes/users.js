@@ -34,10 +34,37 @@ router.post('/login', function (req, res) {
   })
 })
 
+router.post('/adddev', (req, res) => {
+  global.res = res
+  dbClient.connect(url, function (err, db) {
+    if (err) {
+      console.log('Databse connection error')
+      throw err
+    } else {
+      global.db = db
+      adddev(req.body)
+    }
+  })
+})
+
+router.post('/getdev', (req, res) => {
+  global.req = req
+  global.res = res
+  dbClient.connect(url, function (err, db) {
+    if (err) {
+      console.log('Databse connection error')
+      throw err
+    } else {
+      global.db = db
+      getdevs(req.body)
+    }
+  })
+})
+
 function UpdateUser (response) {
   var req = global.req
   var db = global.database.db('BAS')
-  db.collection('Users').findOne({username: req.body.username}, function (err, res) {
+  db.collection('Users').findOne({username: req.body.email}, function (err, res) {
     if (err) {
       response.send(JSON.stringify({result: 'Failed', error: 'InternalError'}))
       throw err
@@ -59,10 +86,11 @@ function insertUser (response) {
 
   var userobject =
     {
-      username: req.body.username,
+      username: req.body.email,
       password: req.body.password,
       email: req.body.email,
-      phone: req.body.phone
+      phone: req.body.phone,
+      devs: []
     }
 
   db.collection('Users').insertOne(userobject, function (err, res) {
@@ -76,7 +104,7 @@ function insertUser (response) {
 
 function auth (req) {
   var db = global.database.db('BAS')
-  var query = {username: req.body.username}
+  var query = {username: req.body.email}
   // console.log(query)
   db.collection('Users').findOne(query, function (err, res) {
     if (err) {
@@ -99,6 +127,34 @@ function auth (req) {
 function secure (password) {
   var res = crypto.createHash('md5').update(password).digest('hex')
   return res
+}
+
+function adddev (data) {
+  var db = global.db.db('BAS')
+  var query = {username: data.email}
+  var dev = data.dev
+  db.collection('Users').update(query, { $push: { 'devs': dev } }, (err, res) => {
+    if (err) {
+      global.res.send(JSON.stringify({Success: false}))
+    } else {
+      global.res.send(JSON.stringify({Success: true}))
+    }
+    global.db.close()
+  })
+}
+
+function getdevs (data) {
+  var db = global.db.db('BAS')
+  var query = {username: data.email}
+
+  db.collection('Users').findOne(query, (err, res) => {
+    if (err) {
+      global.res.send(JSON.stringify({Success: false}))
+    } else {
+      global.res.send(JSON.stringify({devs: res.devs}))
+    }
+    global.db.close()
+  })
 }
 
 module.exports = router
