@@ -26,6 +26,6 @@
     "nodemailer": "^4.6.4"
   },
   "devDependencies": {
-    "pm2": "^2.10.1"
+    "pm2": "^2.10.4"
   }
 }
