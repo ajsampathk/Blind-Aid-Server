@@ -1,6 +1,5 @@
 const mailer = require('nodemailer')
 
-var creds = require('./creds.js')
 
 var notify = {
   notifylist: function (list, lat, lng, devID) {
