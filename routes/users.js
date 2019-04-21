@@ -133,7 +133,7 @@ function adddev (data) {
   var db = global.db.db('BAS')
   var query = {username: data.email}
   var dev = data.dev
-  db.collection('Users').update(query, { $addToset: { 'devs': dev } }, (err, res) => {
+  db.collection('Users').update(query, { $addToSet: { 'devs': dev } }, (err, res) => {
     if (err) {
       global.res.send(JSON.stringify({Success: false}))
     } else {
