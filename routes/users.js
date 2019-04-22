@@ -86,7 +86,7 @@ function insertUser (response) {
 
   var userobject =
     {
-      username: req.body.email,
+      username: req.body.name,
       password: req.body.password,
       email: req.body.email,
       phone: req.body.phone,
