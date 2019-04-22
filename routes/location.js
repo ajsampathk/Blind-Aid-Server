@@ -32,7 +32,7 @@ router.post('/getloc', (req, res) => {
           } else {
             // console.log(res)
             if (res) {
-              global.response.send(JSON.stringify({lat: res[0].lat, lng: res[0].lng, acc: res[0].acc}))
+              global.response.send(JSON.stringify({email:res[0].email,lat: res[0].lat, lng: res[0].lng, acc: res[0].acc}))
             } else {
               global.response.send(JSON.stringify({Success: false, Error: 'Location not found'}))
             }
