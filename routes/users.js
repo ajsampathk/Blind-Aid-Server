@@ -61,6 +61,20 @@ router.post('/getdev', (req, res) => {
   })
 })
 
+router.post('/getinfo', (req, res) => {
+  global.req = req
+  global.res = res
+  dbClient.connect(url, function (err, db) {
+    if (err) {
+      console.log('Databse connection error')
+      throw err
+    } else {
+      global.db = db
+      getinfo(req.body)
+    }
+  })
+})
+
 function UpdateUser (response) {
   var req = global.req
   var db = global.database.db('BAS')
@@ -157,4 +171,18 @@ function getdevs (data) {
   })
 }
 
+
+function getinfo (data) {
+  var db = global.db.db('BAS')
+  var query = {email: data.email}
+
+  db.collection('Users').findOne(query, (err, res) => {
+    if (err) {
+      global.res.send(JSON.stringify({Success: false}))
+    } else {
+      global.res.send(JSON.stringify({name: res.username,phone: res.phone}))
+    }
+    global.db.close()
+  })
+}
 module.exports = router

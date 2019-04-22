@@ -53,7 +53,7 @@ function updateLocation (req) {
     lng: req.body.location.lng,
     acc: req.body.accuracy,
     devID: req.body.id,
-    sos: req.body.sos
+    email: req.body.email
   }
   if (LObject.sos) {
     _notify(LObject.devID, LObject.lat, LObject.lng)
