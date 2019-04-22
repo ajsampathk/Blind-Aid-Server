@@ -104,7 +104,7 @@ function insertUser (response) {
 
 function auth (req) {
   var db = global.database.db('BAS')
-  var query = {username: req.body.email}
+  var query = {email: req.body.email}
   // console.log(query)
   db.collection('Users').findOne(query, function (err, res) {
     if (err) {
