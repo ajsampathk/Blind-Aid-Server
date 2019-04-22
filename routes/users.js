@@ -131,7 +131,7 @@ function secure (password) {
 
 function adddev (data) {
   var db = global.db.db('BAS')
-  var query = {username: data.email}
+  var query = {email: data.email}
   var dev = data.dev
   db.collection('Users').update(query, { $addToSet: { 'devs': dev } }, (err, res) => {
     if (err) {
@@ -145,7 +145,7 @@ function adddev (data) {
 
 function getdevs (data) {
   var db = global.db.db('BAS')
-  var query = {username: data.email}
+  var query = {email: data.email}
 
   db.collection('Users').findOne(query, (err, res) => {
     if (err) {
