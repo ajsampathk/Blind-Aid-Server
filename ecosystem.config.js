@@ -6,7 +6,7 @@ module.exports = {
   deploy: {
     production: {
       user: 'ubuntu',
-      host: 'ec2-18-221-46-221.us-east-2.compute.amazonaws.com',
+      host: 'ec2-18-220-159-36.us-east-2.compute.amazonaws.com',
       key: '~/LocationShareServer.pem',
       ref: 'origin/master',
       repo: 'git@github.com:abhijithsampathkrishna/Blind-Aid-Server.git',
